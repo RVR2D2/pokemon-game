@@ -2,11 +2,8 @@ import s from './layout.module.css'
 
 const Layout = ({title, descr, urlBg, colorBg}) => {
 	return (
-		<section style={{
-			backgroundImage: `url(${urlBg})`,
-			background: colorBg
-		}} className={s.root}>
-			<div className={s.wrapper}>
+		<section style={{backgroundImage: `url(${urlBg})`,}} className={s.root}>
+			<div style={{background: colorBg}} className={s.wrapper}>
 				<article>
 					<div className={s.title}>
 						{title && <h3>
