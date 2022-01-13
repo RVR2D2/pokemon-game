@@ -1,12 +1,9 @@
+import s from './style.model.css'
 import Header from "../../components/Header";
 import Layout from "../../components/Layout";
-import Footer from "../../components/Footer";
 import bg1 from '../../assets/bg3.jpeg'
 import bg2 from '../../assets/bg2.jpeg'
 import PokemonCard from "../../components/PokemonCard";
-import s from './style.model.css'
-import MenuHeader from "../../components/MenuHeader";
-
 const HomePage = ({onChangePage}) => {
 	const POKEMONS = [
 		{
@@ -150,7 +147,6 @@ const HomePage = ({onChangePage}) => {
 	
 	return (
 		<>
-			<MenuHeader/>
 			<Header
 				title='Pokemon Game'
 				descr='This is simple triple triad card game!'
@@ -208,7 +204,6 @@ const HomePage = ({onChangePage}) => {
 				opponent's color. If the player's rank is higher, the opponent's card will be captured and changed into the
 				player's color instead.
 			</Layout>
-			<Footer/>
 		</>
 	)
 }
