@@ -1,38 +1,74 @@
-import {useHistory} from "react-router-dom";
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useContext} from 'react';
 import PokemonCard from "../../components/PokemonCard";
-import database from "../../services/firebase"
+import {FireBaseContext} from "../../context/firebaseContext";
 
-const GamePage = () => {
-	const history = useHistory()
-	const [pokemons, setPokemons] = useState({})
-	const handleClick = () => {
-		history.push('/');
+const DATA = {
+	"abilities": [
+		"keen-eye",
+		"tangled-feet",
+		"big-pecks"
+	],
+	"stats": {
+		"hp": 63,
+		"attack": 60,
+		"defense": 55,
+		"special-attack": 50,
+		"special-defense": 50,
+		"speed": 71
+	},
+	"type": "flying",
+	"img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/17.png",
+	"name": "pidgeotto",
+	"base_experience": 122,
+	"height": 11,
+	"id": 17,
+	"values": {
+		"top": "A",
+		"right": 2,
+		"bottom": 7,
+		"left": 5
 	}
+}
+
+const GamePage = ({}) => {
+	const firebase = useContext(FireBaseContext);
+	const [pokemons, setPokemons] = useState({})
 	
 	useEffect(() => {
-		database.ref('pokemons').once('value', (snapshot) => {
-			setPokemons(snapshot.val());
+		firebase.getPokemonSoket((pokemons) => {
+			setPokemons(pokemons);
 		});
 	}, [])
 	
 	const handleChangeActive = (id) => {
 		setPokemons(prevState => {
-			return Array.from(prevState, (item) => {
-				if (item.id === id) {
-					item.active = true;
+			return Object.entries(prevState).reduce((acc, item) => {
+				const pokemon = {...item[1]};
+				if (pokemon.id === id) {
+					pokemon.active = !pokemon.active
 				}
-				return item;
-			})
-		})
-	}
+				
+				acc[item[0]] = pokemon;
+				firebase.postPokemon(item[0], pokemon);
+				return acc;
+			}, {});
+		});
+	};
+	
+	const handleAddPokemon = () => {
+		const data = DATA;
+		firebase.addPokemon(data);
+	};
 	
 	return (
 		<>
 			<div>
 				This is game page!
+				<div>
+					<button onClick={handleAddPokemon}>Add new Pokemons</button>
+				</div>
 				<div className='flex'>
-					{Object.entries(pokemons).map(([key,{name, id, img, type, values, active}]) => (
+					{Object.entries(pokemons).map(([key, {name, id, img, type, values, active}]) => (
 						<PokemonCard
 							key={key}
 							name={name}
@@ -46,7 +82,6 @@ const GamePage = () => {
 					))}
 				</div>
 			</div>
-			<button onClick={handleClick}>Home</button>
 		</>
 	);
 };

@@ -42,6 +42,8 @@ button:visited {
 	color: #fafafa;
 	font-weight: bold;
 	outline: none;
+	width: 150px;
+	height: 50px;
 }
 
 button:hover {
